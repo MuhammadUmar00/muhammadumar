@@ -75,24 +75,28 @@
 
   <script>
     function downloadFile() {
-      // Specify the file path relative to the root directory
-      const filePath = "/cv/Muhammad-Umar-Resume-2024.pdf"; // Path to your file (e.g., PDF file)
+    const fileUrl = "https://muhammadumar00.github.io/muhammadumar/cv/Muhammad-Umar-Resume-2024.pdf"; // External file URL
+    
+    // Fetch the file and trigger download
+    fetch(fileUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = "Muhammad-Umar-Resume-2024.pdf"; // Custom filename for the downloaded file
+            
+            // Append the anchor, trigger click, then remove it
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
 
-      // Create an anchor element
-      const a = document.createElement("a");
-      a.href = filePath; // Set the href to the file path
-      a.download = "Muhammad-Umar-Resume-2024.pdf"; // The name of the file once downloaded (you can customize it)
-
-      // Append the anchor to the DOM (it’s not visible)
-      document.body.appendChild(a);
-
-      // Programmatically click the anchor to trigger the download
-      a.click();
-
-      // Remove the anchor element from the DOM
-      document.body.removeChild(a);
-    }
-  </script>
+            // Clean up the object URL after the download
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error downloading the file:', error));
+}
+</script>
 </head>
 
 <body>
