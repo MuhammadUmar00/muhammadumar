@@ -179,7 +179,7 @@
         }
       },
       {
-        offset: "150px",
+        offset: "280px",
       }
     );
 
@@ -224,18 +224,30 @@
   var stickyFunction = function () {
     var h = $(".image-content").outerHeight();
 
+    // Check if the screen width is less than or equal to 992px
     if ($(window).width() <= 992) {
+      // If on mobile, detach sticky-kit
       $("#sticky_item").trigger("sticky_kit:detach");
     } else {
+      // On desktop, make sure to remove detachment and unsticking
       $(".sticky-parent").removeClass("stick-detach");
       $("#sticky_item").trigger("sticky_kit:detach");
       $("#sticky_item").trigger("sticky_kit:unstick");
+
+      // Apply sticky-kit to the element again
+      if (typeof $.fn.stick_in_parent === "function") {
+        $("#sticky_item").stick_in_parent();
+      } else {
+        console.error("sticky-kit plugin not loaded.");
+      }
     }
 
+    // Handle window resize
     $(window).resize(function () {
       var h = $(".image-content").outerHeight();
       $(".sticky-parent").css("height", h);
 
+      // If screen is less than or equal to 992px, detach sticky
       if ($(window).width() <= 992) {
         $("#sticky_item").trigger("sticky_kit:detach");
       } else {
@@ -243,13 +255,22 @@
         $("#sticky_item").trigger("sticky_kit:detach");
         $("#sticky_item").trigger("sticky_kit:unstick");
 
-        $("#sticky_item").stick_in_parent();
+        // Ensure sticky-kit is applied if needed
+        if (typeof $.fn.stick_in_parent === "function") {
+          $("#sticky_item").stick_in_parent();
+        } else {
+          console.error("sticky-kit plugin not loaded.");
+        }
       }
     });
 
+    // Initial application of sticky-kit
     $(".sticky-parent").css("height", h);
-
-    $("#sticky_item").stick_in_parent();
+    if (typeof $.fn.stick_in_parent === "function") {
+      $("#sticky_item").stick_in_parent();
+    } else {
+      console.error("sticky-kit plugin not loaded.");
+    }
   };
 
   var owlCrouselFeatureSlide = function () {
